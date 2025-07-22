@@ -5,6 +5,11 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "bedrock-agentcore>=0.1.0",
+    "bedrock-agentcore-starter-toolkit>=0.1.0",
     "pillow>=11.2.1",
-    "strands-agents>=0.1.6",
+    "strands-agents-builder>=0.1.5",
+    "strands-agents-tools[mem0-memory,use-browser]>=0.1.8",
+    "strands-agents[litellm,mcp,otel]>=0.1.6",
+    "watchtower>=3.4.0",
 ]
