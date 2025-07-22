@@ -6,7 +6,24 @@ This demonstration showcases intelligent browser automation using the Model Cont
 
 ## Prerequisites
 
-### bedrock_agentcore Setup
+### playwright-mcp Setup
+
+``` bash
+# Clone the repository:
+git clone https://github.com/yytdfc/playwright-mcp.git -b dev
+cd playwright-mcp
+
+# Install dependencies:
+npm install
+
+# Build the project:
+npm run build
+
+# Create a local link:
+npm link
+```
+
+### bedrock_agentcore create session
 
 ```python
 from bedrock_agentcore.tools.browser_client import browser_session
@@ -22,7 +39,7 @@ with browser_session(REGION) as client:
     headers = json.dumps(headers)
 ```
 
-### MCP Client Setup
+### MCP Client init
 
 ```python
 from mcp import stdio_client, StdioServerParameters
@@ -40,23 +57,6 @@ mcp_client = MCPClient(lambda: stdio_client(
         ]
     )
 ))
-```
-
-### playwright-mcp Setup
-
-``` bash
-# Clone the repository:
-git clone https://github.com/yytdfc/playwright-mcp.git -b dev
-cd playwright-mcp
-
-# Install dependencies:
-npm install
-
-# Build the project:
-npm run build
-
-# Create a local link:
-npm link
 ```
 
 ## Execution Options
