@@ -6,6 +6,42 @@ This demonstration showcases intelligent browser automation using the Model Cont
 
 ## Prerequisites
 
+### bedrock_agentcore Setup
+
+```python
+from bedrock_agentcore.tools.browser_client import browser_session
+
+REGION = "us-west-2"
+
+# Initialize browser session
+with browser_session(REGION) as client:
+    ws_url, headers = client.generate_ws_headers()
+    print("session id:", client.session_id)
+    print("console url:")
+    print(f"https://{REGION}.console.aws.amazon.com/bedrock-agentcore/builtInTools/browser/aws.browser.v1/session/{client.session_id}#")
+    headers = json.dumps(headers)
+```
+
+### MCP Client Setup
+
+```python
+from mcp import stdio_client, StdioServerParameters
+from strands.tools.mcp import MCPClient
+
+# Initialize MCP client
+mcp_client = MCPClient(lambda: stdio_client(
+    StdioServerParameters(
+        command="npx", 
+        args=[
+            "@playwright/mcp",
+            "--cdp-endpoint", ws_url,
+            "--cdp-headers", headers,
+            # Add "--caps", "vision" for vision mode
+        ]
+    )
+))
+```
+
 ### playwright-mcp Setup
 
 ``` bash
