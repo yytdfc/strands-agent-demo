@@ -1,8 +1,6 @@
 from strands import Agent
 from strands_tools import calculator
 
-from strands.telemetry import StrandsTelemetry
-
 from sagemaker_model import SageMakerModel
 
 model = SageMakerModel(endpoint_name="Qwen-Qwen3-30B-A3B-FP8-250724-1124", model_id="Qwen/Qwen3-30B-A3B-FP8")
