@@ -332,6 +332,7 @@ class SageMakerModel(Model):
         """
         logger.debug("formatting request")
         request = self.format_request(messages, tool_specs, system_prompt)
+
         logger.debug("formatted request=<%s>", request)
 
         logger.debug("invoking model")
@@ -348,12 +349,13 @@ class SageMakerModel(Model):
         tool_calls: dict[int, list[Any]] = {}
 
         buffer = ""
+        has_tool_call = False
         for t in response["Body"]:
             buffer += t["PayloadPart"]["Bytes"].decode()
             last_idx = 0
-            for match in re.finditer(r'^data:\s*(.+?)(\n\n)', buffer):
+            for match in re.finditer(r'(^|\n)data:\s*(\{.+?\})\n', buffer):
                 try:
-                    event = Dict(json.loads(match.group(1).strip()))
+                    event = Dict(json.loads(match.group(2).strip()))
                 except json.decoder.JSONDecodeError:
                     continue
                 last_idx = match.end()
@@ -378,8 +380,11 @@ class SageMakerModel(Model):
 
                 for tool_call in choice.delta.tool_calls or []:
                     tool_calls.setdefault(tool_call.index, []).append(tool_call)
+                    has_tool_call = True
 
                 if choice.finish_reason:
+                    if choice.finish_reason == "stop" and has_tool_call:
+                        choice.finish_reason = "tool_calls"
                     break
             buffer = buffer[last_idx:]
 
